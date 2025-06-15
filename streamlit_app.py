@@ -84,7 +84,8 @@ def generate_mode_c_predictions():
         scores += hot_zone_score(historical_freq) * 1.5
         scores -= cold_zone_score(historical_freq) * 0.5
 
-        scores = np.maximum(scores, 0)
+        scores = np.maximum(scores.to_numpy(), 0)  # Ensure NumPy array for math
+
         if scores.sum() == 0:
             probs = np.ones_like(scores) / len(scores)
         else:
