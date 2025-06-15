@@ -83,7 +83,13 @@ def generate_mode_c_predictions():
         scores += np.random.randn(47) * 0.5
         scores += hot_zone_score(historical_freq) * 1.5
         scores -= cold_zone_score(historical_freq) * 0.5
-        probs = scores / scores.sum()
+
+        scores = np.maximum(scores, 0)
+        if scores.sum() == 0:
+            probs = np.ones_like(scores) / len(scores)
+        else:
+            probs = scores / scores.sum()
+
         picks = np.random.choice(NUMBERS_RANGE, size=NUM_MAIN, replace=False, p=probs)
         predictions.append(sorted(picks))
     return predictions
