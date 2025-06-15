@@ -39,7 +39,13 @@ else:
 flat_numbers = historical_numbers.values.flatten()
 historical_freq = pd.Series(0, index=NUMBERS_RANGE)
 for num in flat_numbers:
-    historical_freq[num] += 1
+    try:
+        clean_num = int(float(num))  # handles strings and floats
+        if clean_num in historical_freq.index:
+            historical_freq[clean_num] += 1
+    except:
+        continue
+
 st.subheader("📊 Historical Frequency Chart")
 st.bar_chart(historical_freq)
 
